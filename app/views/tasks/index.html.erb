@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Tasks</h1>
+
+<%= search_form_for @q do |f| %>
+  <%= f.label :name_or_description_cont,"Titre ou description" %>
+  <%= f.search_field :name_or_description_cont%>
+
+  <%= f.label :deadline, "Date" %>
+  <%= f.date_field :deadline_gteq, include_blank: true %> 〜
+  <%= f.date_field :deadline_lteq, include_blank: true %>
+
+  <%= f.label :status, "status" %>
+  <%= f.radio_button :status_eq, '', checked: true %>
+  <%= f.label :status, "No designation", value: nil, style: "display: inline-block" %>
+  <%= f.radio_button :status_eq, 0 %>
+  <%= f.label :status, "todo", value: 0, style: "display: inline-block;" %>
+  <%= f.radio_button :status_eq, 1 %>
+  <%= f.label :status, "doing", value: 1, style: "display: inline-block;" %>
+  <%= f.radio_button :status_eq, 2 %>
+  <%= f.label :status, "done", value: 2, style: "display: inline-block;" %>
+
+  <%= f.submit %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th><%= sort_link(@q, :deadline,  default_order: :desc) %></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @tasks.each do |task| %>
+      <tr>
+        <td><%= task.title %></td>
+        <td><%= task.description %></td>
+        <td><%= task.status %></td>
+        <td><%= task.deadline.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= link_to 'Show', task %></td>
+        <td><%= link_to 'Edit', edit_task_path(task) %></td>
+        <td><%= link_to 'Destroy', task, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Task', new_task_path %>
